@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   XFile? image; // 선택한 이미지를 저장할 변수
   Set<StickerModel> stickers = {}; // 화면에 추가된 스티커를 저장할 변수
   String? selectedId; // 현재 선택된 스티커의 ID
-
+  GlobalKey imgKey = GlobalKey(); // 이미지로 전환할 위젯에 입력해줄 키값
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,8 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget renderBody() {
     if (image != null) {
+      return RepaintBoundary(
+        // 위젯을 이미지로 저장하는 데 사용
+        key: imgKey,
       // Stack 크기의 최대 크기만큼 차지
-      return Positioned.fill(
+        child: Positioned.fill(
         // 위젯 확대 및 좌우 이동을 가능하게 하는 위젯
         child: InteractiveViewer(
           child: Stack(
@@ -83,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+        ),
         ),
       );
     } else {
