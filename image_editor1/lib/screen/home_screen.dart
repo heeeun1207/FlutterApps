@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   XFile? image; // 선택한 이미지를 저장할 변수
-  Set<StickerModel> stikers = {}; // 화면에 추가된 스티커를 저장할 변수
+  Set<StickerModel> stickers = {}; // 화면에 추가된 스티커를 저장할 변수
   String? selectedId; // 현재 선택된 스티커의 ID
 
 
@@ -68,16 +68,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 // 이미지가 부모 위젯 크기의 최대를 차지하도록 하기
                 fit: BoxFit.cover,
               ),
-              ...stikers.map(
-                    (stiker) => Center( // 최초 스티커 선택시 중앙에 배치
+              ...stickers.map(
+                    (sticker) => Center( // 최초 스티커 선택시 중앙에 배치
                   child: EmoticonStictker(
-                    key: ObjectKey(stiker.id),
+                    key: ObjectKey(sticker.id),
                     onTransform: (){
-                      onTransform(stiker.id);
+                      onTransform(sticker.id);
                       // 스티커의 ID값 함수의 매개변수로 전달
                     },
-                    imgPath : stiker.imgPath,
-                    isSelected : selectedId == stiker.id,
+                    imgPath : sticker.imgPath,
+                    isSelected : selectedId == sticker.id,
                   ),
                 ),
               ),
@@ -110,12 +110,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onSaveImage() {}
 
-  void onDeleteItem() {}
+  void onDeleteItem() async{
+    setState(() {
+      stickers = stickers.where((sticker) => sticker.id != selectedId).toSet();
+      // 현재 선택되 있는 스티커 삭제 후 Set으로 변환
+    });
+  }
 
   void onEmoticonTap(int index) async{
     setState(() {
-      stikers = {
-        ...stikers,
+      stickers = {
+        ...stickers,
         StickerModel(
           id: Uuid().v4(), // 스티커의 고유 ID
           imgPath: 'asset/img/emoticon_$index.png',
