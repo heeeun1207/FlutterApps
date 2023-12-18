@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_editor1/component/main_app_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io'; // 파일 관련 기능을 사용하기 위해 추가
@@ -6,6 +7,13 @@ import 'package:image_editor1/component/footer.dart';
 import 'package:image_editor1/model/sitcker_model.dart';
 import 'package:image_editor1/component/emotion_sticker.dart';
 import 'package:uuid/uuid.dart';
+
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
+import 'dart:typed_data';
+
+// 이미지 저장 임포트 기능
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -112,7 +120,26 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void onSaveImage() {}
+  void onSaveImage() async { // 이미지 저장 기능 구현 함수
+    RenderRepaintBoundary boundary = imgKey.currentContext!
+        .findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage(); // 바운더리를 이미지로 변경
+    ByteData? byteDate = await image.toByteData(format: ui.ImageByteFormat.png);
+    // byte data 형태로 변경
+    Uint8List pngBytes = byteDate!.buffer.asUint8List();
+    // Uint8List 형태로 변경
+    // ImageGallerySaver 플러그인은 바이터 데이터가 8비트 정수형으로 변환되는걸 요구하므로 필수 과정이다.
+
+    // 이미지 저장하기
+    await ImageGallerySaver.saveImage(pngBytes, quality: 100);
+
+    ScaffoldMessenger.of(context).showSnackBar( // 저장후 SnackBar 보여주기
+      SnackBar(
+          content:Text('저장되었습니다!'),
+      ),
+    );
+  }
+
 
   void onDeleteItem() async{
     setState(() {
