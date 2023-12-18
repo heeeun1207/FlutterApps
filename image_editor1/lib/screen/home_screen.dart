@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
               ...stikers.map(
                   (stiker) => Center( // 최초 스티커 선택시 중앙에 배치
-                 child: EmoticonStictker(,
+                 child: EmoticonStictker(
                     key: ObjectKey(stiker.id),
                     onTransform: onTransform,
                     imgPath : stiker.imgPath,
