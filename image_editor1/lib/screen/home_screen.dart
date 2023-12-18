@@ -63,16 +63,19 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Stack(
             fit: StackFit.expand, // 크기 최대로 늘려주기
             children: [
-            Image.file(
-            File(image!.path),
-            // 이미지가 부모 위젯 크기의 최대를 차지하도록 하기
-            fit: BoxFit.cover,
-            ),
+              Image.file(
+                File(image!.path),
+                // 이미지가 부모 위젯 크기의 최대를 차지하도록 하기
+                fit: BoxFit.cover,
+              ),
               ...stikers.map(
-                  (stiker) => Center( // 최초 스티커 선택시 중앙에 배치
-                 child: EmoticonStictker(
+                    (stiker) => Center( // 최초 스티커 선택시 중앙에 배치
+                  child: EmoticonStictker(
                     key: ObjectKey(stiker.id),
-                    onTransform: onTransform,
+                    onTransform: (){
+                      onTransform(stiker.id);
+                      // 스티커의 ID값 함수의 매개변수로 전달
+                    },
                     imgPath : stiker.imgPath,
                     isSelected : selectedId == stiker.id,
                   ),
@@ -121,5 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void onTransform() {}
+  void onTransform(String id) {
+    // 스티커가 변형될 때마다 변형 중인 스티커를 현재 선택한 스티커로 지정
+    setState(() {
+      selectedId = id;
+    });
+  }
 }

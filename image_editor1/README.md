@@ -34,8 +34,8 @@
 - Image 선택기능
 - Body
 - Footer
-- EmotionSticker 위젯 (진행중)
-- 스티커 붙이기
+- EmotionSticker 위젯 
+- 스티커 붙이기 (진행중)
 ---
 여러개 스티커를 한꺼번에 관리하기 편하도록 lib/model/sticker_model.dart 파일 만들기 <br>
 이 파일에서는 StickerModel 클래스를 구현해서 각각의 스티커에 필요한 정보를 저장해둔다.<br>
